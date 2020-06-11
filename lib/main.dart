@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './resultado.dart';
 import './questionario.dart';
+
 main() {
   runApp(new PerguntaApp());
 }
@@ -8,22 +9,31 @@ main() {
 class _PerguntaAppState extends State<PerguntaApp> {
   var _perguntaSelecionada = 0;
 
-   bool get existePerguntaSelecinada {
+  bool get existePerguntaSelecinada {
     return _perguntaSelecionada < _perguntas.length;
   }
 
   final List<Map<String, Object>> _perguntas = const [
     {
       'texto': 'Qual sua cor favorita?',
-      'respostas': ['Azul', 'Verde']
+      'respostas': [
+        {'texto':'Azul','nota':10},
+        {'texto':'Verde','nota':1},
+      ]
     },
     {
       'texto': 'Qual seu animal favorito?',
-      'respostas': ['Leão', 'Ema']
+      'respostas': [
+        {'texto':'Leão','nota':10},
+        {'texto':'Ema','nota':1},
+      ]
     },
     {
       'texto': 'Qual instrutor favorito?',
-      'respostas': ['Clara', 'Ana']
+      'respostas': [
+        {'texto':'Clara','nota':10},
+        {'texto':'Ana','nota':1},
+      ]
     }
   ];
 
@@ -46,7 +56,10 @@ class _PerguntaAppState extends State<PerguntaApp> {
             title: Text('Home Perguntas'),
           ),
           body: existePerguntaSelecinada
-              ? Questionario(perguntas: _perguntas, perguntaSelecionada: _perguntaSelecionada, quandoResponder: _responder)
+              ? Questionario(
+                  perguntas: _perguntas,
+                  perguntaSelecionada: _perguntaSelecionada,
+                  quandoResponder: _responder)
               : Resultado('Parabéns!')),
     );
   }

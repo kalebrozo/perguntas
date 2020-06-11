@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import './questao.dart';
-import './resposta.dart';
 import './resultado.dart';
+import './questionario.dart';
 main() {
   runApp(new PerguntaApp());
 }
 
 class _PerguntaAppState extends State<PerguntaApp> {
   var _perguntaSelecionada = 0;
+
+   bool get existePerguntaSelecinada {
+    return _perguntaSelecionada < _perguntas.length;
+  }
 
   final List<Map<String, Object>> _perguntas = const [
     {
@@ -24,10 +27,6 @@ class _PerguntaAppState extends State<PerguntaApp> {
     }
   ];
 
-  bool get existePerguntaSelecinada {
-    return _perguntaSelecionada < _perguntas.length;
-  }
-
   void _responder() {
     if (existePerguntaSelecinada) {
       setState(() {
@@ -41,24 +40,14 @@ class _PerguntaAppState extends State<PerguntaApp> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> respostas = existePerguntaSelecinada
-        ? _perguntas[_perguntaSelecionada]['respostas']
-        : null;
-
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
             title: Text('Home Perguntas'),
           ),
           body: existePerguntaSelecinada
-              ? Column(
-                  children: <Widget>[
-                    Questao(_perguntas[_perguntaSelecionada]['texto']),
-                    ...respostas.map((e) => Resposta(e, _responder)).toList(),
-                  ],
-                )
-              : 
-             Resultado('Parabéns!')),
+              ? Questionario(perguntas: _perguntas, perguntaSelecionada: _perguntaSelecionada, quandoResponder: _responder)
+              : Resultado('Parabéns!')),
     );
   }
 }

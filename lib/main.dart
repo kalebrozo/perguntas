@@ -1,61 +1,69 @@
 import 'package:flutter/material.dart';
 import './questao.dart';
+import './resposta.dart';
 
 main() {
   runApp(new PerguntaApp());
 }
 
 class _PerguntaAppState extends State<PerguntaApp> {
-var _perguntaSelecionada = 0;
+  var _perguntaSelecionada = 0;
 
-void _responder() {
+  final List<Map<String, Object>> _perguntas = const [
+    {
+      'texto': 'Qual sua cor favorita?',
+      'respostas': ['Azul', 'Verde']
+    },
+    {
+      'texto': 'Qual seu animal favorito?',
+      'respostas': ['Leão', 'Ema']
+    },
+    {
+      'texto': 'Qual instrutor favorito?',
+      'respostas': ['Clara', 'Ana']
+    }
+  ];
 
-    setState(() {
-      if(_perguntaSelecionada<1)
-      _perguntaSelecionada++;
-    });
+  bool get existePerguntaSelecinada {
+    return _perguntaSelecionada < _perguntas.length;
+  }
+
+  void _responder() {
+    if (existePerguntaSelecinada) {
+      setState(() {
+        _perguntaSelecionada++;
+      });
+    }
 
     print(_perguntaSelecionada);
     print('Pergunta respondida');
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
-    
-    final List<String> perguntas = [
-          'Qual sua cor favorita?',
-          'Qual seu animal favorito?'
-          ];
+    List<String> respostas = existePerguntaSelecinada
+        ? _perguntas[_perguntaSelecionada]['respostas']
+        : null;
 
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
             title: Text('Home Perguntas'),
           ),
-          body: Column(
-            children: <Widget>[
-              Questao(perguntas[_perguntaSelecionada]),
-              RaisedButton(
-                child: Text('Azul'),
-                onPressed: _responder,
-              ),
-              RaisedButton(
-                child: Text('Vermelho'),
-                onPressed: _responder,
-              ),
-              RaisedButton(
-                child: Text('Verde'),
-                onPressed: _responder,
-              ),
-            ],
-        )
-      ),
+          body: existePerguntaSelecinada
+              ? Column(
+                  children: <Widget>[
+                    Questao(_perguntas[_perguntaSelecionada]['texto']),
+                    ...respostas.map((e) => Resposta(e, _responder)).toList(),
+                  ],
+                )
+              : null),
     );
   }
 }
 
-class PerguntaApp extends StatefulWidget {  
+class PerguntaApp extends StatefulWidget {
   _PerguntaAppState createState() {
     return _PerguntaAppState();
-  }  
+  }
 }
